@@ -1,24 +1,28 @@
-package main
+// package db
 
-import (
-	"fmt"
-	"log"
-	"net/http"
-	"os"
+// import (
 
-	_ "github.com/joho/godotenv/autoload"
-)
+// 	"context"
+// 	"os"
 
-func homePage(w http.ResponseWriter, r *http.Request){
-	envValue := os.Getenv("TEST")
-    fmt.Fprintf(w, envValue)
-    fmt.Println("Endpoint Hit: homePage")
-}
-func handleRequests() {
-    http.HandleFunc("/", homePage)
-    log.Fatal(http.ListenAndServe(":10000", nil))
-}
+// 	"github.com/jackc/pgx/v5"
+	
+// )
 
-func main() {
-    handleRequests()
-}
+// // var db *sql.DB
+// var db *pgx.Conn
+// var err error
+
+// func Init() {
+// 	another := os.Getenv("DB_URL")
+// 	db, err = gorm.Open(postgres.Open(another), &gorm.Config{})
+
+// 	if err != nil {
+// 		panic(err.Error())
+// 	}
+
+// }
+
+// func CreateConn() *pgx.Conn {
+// 	return db
+// }

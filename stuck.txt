@@ -1,0 +1,1 @@
+pas ngambil, pkId nya gak kebaca klo pake model, musti manual pake int
