@@ -31,7 +31,7 @@ func (h UserController)SignUp(c *gin.Context) {
 	}
 	// check user exist with email
 	var user models.User
-	result := conn.Raw("SELECT * FROM \"user\" WHERE email = ? LIMIT 1", userForm.Email).Scan(&user)
+	result := conn.Raw("SELECT * FROM public.user WHERE email = ? LIMIT 1", userForm.Email).Scan(&user)
 	if result.RowsAffected > 0{
 		fmt.Println(user)
 		c.JSON(409, gin.H{"message": "user with email already exist"})
@@ -93,6 +93,19 @@ func (h UserController)SignIn(c *gin.Context){
 	if err:= c.ShouldBindJSON(&loginForm); err != nil{
 		c.JSON(400, gin.H{
 			"message":err.Error()})
+		return
+	}
+	if loginForm.Email == "" || loginForm.Password == ""{
+		c.JSON(400, gin.H{"message":"bad request"})
+		return
+	}
+	if !helper.IsValidEmail(loginForm.Email) {
+		c.JSON(400, gin.H{"message":"invalid email format"})
+		return
+	}
+	if len(loginForm.Password) < 5 || len(loginForm.Password) >15 {
+		c.JSON(400, gin.H{
+			"message":"password cannot below 5 nor exceed 15 characters"})
 		return
 	}
 	var user models.User

@@ -26,14 +26,14 @@ type Cat struct {
 	Sex         string    `json:"sex"`
 	AgeInMonth  int       `gorm:"column:ageInMonth" json:"ageInMonth"`
 	Description string    `json:"description"`
-	HasMatched  bool      `json:"hasMatched"`
+	HasMatched  bool      `json:"hasMatched" gorm:"column:hasMatched"`
 	ImageUrls   pq.StringArray `json:"imageUrls" gorm:"type:text[];column:imageUrls"`
 	CreatedAt   string    `json:"created_at"`
 	UpdatedAt   string    `json:"updated_at,omitempty"`
 }
 
 type GetCat struct {
-	Id          string   `gorm:"column:id"`
+	Id          string   `gorm:"column:id" json:"id"`
 	Name        string   `json:"name"`
 	Race        string   `json:"race"`
 	Sex         string   `json:"sex"`
@@ -41,5 +41,5 @@ type GetCat struct {
 	Description string   `json:"description"`
 	HasMatched  bool     `json:"hasMatched"`
 	ImageUrls    pq.StringArray `json:"imageUrls" gorm:"type:text[];column:imageUrls"`
-	CreatedAt   string   `json:"created_at"`
+	CreatedAt   string   `json:"createdAt"`
 }

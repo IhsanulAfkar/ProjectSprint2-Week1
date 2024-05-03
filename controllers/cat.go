@@ -157,6 +157,9 @@ func (h CatController) GetAllCats(c *gin.Context){
 	if ageInMonth != "" {
 		// if no lt nor gt
 		if !(ageInMonth[0] == '>' || ageInMonth[0] == '<') {
+			if ageInMonth[0] == '='{
+				ageInMonth = ageInMonth[1:]
+			}
 			_, err := strconv.Atoi(ageInMonth)
 			if err == nil {
 				// not an int
@@ -300,9 +303,11 @@ func (h CatController)UpdateCat(c *gin.Context){
 	if result.RowsAffected == 0{
 		c.JSON(404, gin.H{
 			"message":"id not found"})
-		return
-	}
-	if cat.Sex != catForm.Sex && cat.HasMatched {
+			return
+		}
+	result = conn.Exec("SELECT * FROM matcher WHERE \"userCatId\" = ? OR \"matchCatId\" = ?", cat.PkId, cat.PkId) 
+	
+	if cat.Sex != catForm.Sex && result.RowsAffected > 0 {
 		c.JSON(400, gin.H{
 			"message":"cannot edit cat's sex when already matched"})
 			return

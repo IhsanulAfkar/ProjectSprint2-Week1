@@ -36,6 +36,8 @@ func (h MatcherController) CreateMatch(c *gin.Context){
 	var userCat models.Cat
 	result := conn.Raw("SELECT * FROM cat WHERE id = ?", createMatch.MatchCatId).Scan(&matchCat)
 	result2 := conn.Raw("SELECT * FROM cat WHERE id = ?", createMatch.UserCatId).Scan(&userCat)
+	fmt.Println(userCat.HasMatched)
+	fmt.Println(matchCat.HasMatched)
 	if result.RowsAffected == 0 {
 		listError["matchCatId"] = "cat not found"
 	}
@@ -46,16 +48,16 @@ func (h MatcherController) CreateMatch(c *gin.Context){
 		listError["message"] = "message length must be between 5-120 characters"
 	}
 	if len(listError) > 0 {
-		c.JSON(404, gin.H{
+		c.JSON(400, gin.H{
 			"message":"cat not found",
 			"errors":listError})
 		return
 	}
-	fmt.Println(userCat.UserId, userId)
+	// fmt.Println(userCat.UserId, userId)
 	userIdStr := fmt.Sprintf("%s", userId)
 	val, _ := strconv.Atoi(userIdStr)
 	if  userCat.UserId != val{
-		c.JSON(404, gin.H{"message":"its not your cat :)"})		
+		c.JSON(400, gin.H{"message":"its not your cat :)"})		
 		return
 	}
 	// if cats owner is same
@@ -64,6 +66,7 @@ func (h MatcherController) CreateMatch(c *gin.Context){
 		return
 	}
 	// one or those already matched
+	
 	if userCat.HasMatched {
 		c.JSON(400, gin.H{"message":"user cat already matched"})
 		return
